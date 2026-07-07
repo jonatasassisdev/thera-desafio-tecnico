@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SalesOrderStatus {
+  CREATED
+  PLANNED
+  SCHEDULED
+  IN_TRANSIT
+  DELIVERED
+}
+
+enum SchedulingStatus {
+  PENDING
+  CONFIRMED
+  RESCHEDULED
+}
+
+enum AuditAction {
+  SALES_ORDER_CREATED
+  STATUS_CHANGED
+  SCHEDULING_CHANGED
+  TRANSPORT_CHANGED
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  document  String   @unique
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorizedTransportTypes CustomerTransportType[]
+  salesOrders              SalesOrder[]
+
+  @@map("customers")
+}
+
+model TransportType {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  authorizedCustomers CustomerTransportType[]
+  salesOrders         SalesOrder[]
+
+  @@map("transport_types")
+}
+
+model CustomerTransportType {
+  customerId      String
+  transportTypeId String
+  createdAt       DateTime @default(now())
+
+  customer      Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  transportType TransportType @relation(fields: [transportTypeId], references: [id], onDelete: Cascade)
+
+  @@id([customerId, transportTypeId])
+  @@map("customer_transport_types")
+}
+
+model Item {
+  id          String   @id @default(uuid())
+  sku         String   @unique
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  salesOrderItems SalesOrderItem[]
+
+  @@map("items")
+}
+
+model SalesOrder {
+  id              String           @id @default(uuid())
+  number          Int              @default(autoincrement())
+  customerId      String
+  transportTypeId String
+  status          SalesOrderStatus @default(CREATED)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  customer      Customer         @relation(fields: [customerId], references: [id])
+  transportType TransportType    @relation(fields: [transportTypeId], references: [id])
+  items         SalesOrderItem[]
+  scheduling    Scheduling?
+
+  @@map("sales_orders")
+}
+
+model SalesOrderItem {
+  id           String @id @default(uuid())
+  salesOrderId String
+  itemId       String
+  quantity     Int
+
+  salesOrder SalesOrder @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+  item       Item       @relation(fields: [itemId], references: [id])
+
+  @@unique([salesOrderId, itemId])
+  @@map("sales_order_items")
+}
+
+model Scheduling {
+  id           String           @id @default(uuid())
+  salesOrderId String           @unique
+  deliveryDate DateTime
+  windowStart  String
+  windowEnd    String
+  status       SchedulingStatus @default(PENDING)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  salesOrder SalesOrder @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+
+  @@map("schedulings")
+}
+
+model AuditLog {
+  id            String      @id @default(uuid())
+  timestamp     DateTime    @default(now())
+  action        AuditAction
+  entity        String
+  entityId      String
+  previousState Json?
+  newState      Json?
+
+  @@index([entity, entityId])
+  @@map("audit_logs")
+}
