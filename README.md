@@ -18,6 +18,8 @@ Solução Full Stack para o desafio técnico de gestão do ciclo de vida de Orde
 - [Considerações sobre performance](#considerações-sobre-performance)
 - [Trade-offs assumidos](#trade-offs-assumidos)
 - [Diferenciais implementados](#diferenciais-implementados)
+- [Responsividade](#responsividade)
+- [Uso de IA no desenvolvimento](#uso-de-ia-no-desenvolvimento)
 
 ## Tecnologias utilizadas
 
@@ -249,3 +251,21 @@ npm run test:e2e # integração (requer Postgres acessível via DATABASE_URL)
 - **Design system próprio no frontend**: componentes de Select, Autocomplete, Date, Time e máscara de documento totalmente customizados (sem depender de widgets nativos do navegador ou bibliotecas de UI de terceiros), com um sistema de cores semânticas (`Chip`) de 6 tons fixos reaproveitado em toda a aplicação.
 - **Indicador global de carregamento** reativo ao estado de rede do React Query, sem instrumentação manual por tela.
 - Interface completa (não apenas os requisitos mínimos de tela): monitoramento operacional com filtros combinados, central de agendamento com ações inline, trilha de auditoria visível por Ordem de Venda.
+- **Interface responsiva**, adaptada para uso em desktop, tablet e mobile (ver [Responsividade](#responsividade)).
+
+## Responsividade
+
+A interface foi adaptada para uso completo em desktop, tablet e mobile — não apenas testada em uma única resolução:
+
+- **Navegação**: em telas menores que `md` (768px), a barra lateral vira um menu do tipo *drawer*, acionado por um cabeçalho compacto com botão de menu (ícone hambúrguer), em vez de ocupar espaço fixo da tela. Em `md` e acima, ela volta a ser fixa, exatamente como no desktop.
+- **Tabelas**: todas as listagens (Clientes, Itens, Tipos de Transporte, Ordens de Venda, Central de Agendamento) têm scroll horizontal isolado ao próprio container em telas estreitas, em vez de forçar a página inteira a rolar na largura ou quebrar o layout — um padrão consolidado em produtos como GitHub, Linear e Notion para tabelas densas em mobile. Colunas de texto livre (nome, descrição) continuam quebrando linha normalmente para reduzir a necessidade de rolagem.
+- **Formulários e modais**: grids que eram fixos em várias colunas (ex: o formulário de agendamento, a linha de item da Ordem de Venda) passaram a colapsar para uma única coluna em telas pequenas e se expandir a partir do breakpoint `sm`/`md`. O padding interno dos modais também se ajusta à largura disponível.
+- **Verificação**: a adaptação foi validada visualmente com Playwright em viewport de 375×812 (iPhone-like) em todas as telas principais — incluindo a abertura do menu mobile, o formulário de nova Ordem de Venda, o painel de agendamento expandido e os modais de cadastro — confirmando ausência de overflow horizontal indesejado na página e comportamento consistente com a versão desktop.
+
+## Uso de IA no desenvolvimento
+
+Parte da construção deste projeto contou com o **Claude Code** (Anthropic) como par de desenvolvimento. Vale deixar explícito como essa ferramenta foi usada, porque o "como" importa mais que o "se":
+
+- **O que foi meu**: todas as decisões de arquitetura e modelagem (separação de camadas, desenho da máquina de estados da Ordem de Venda, estratégia de auditoria, escolha entre paginação server-side vs. client-side, divisão de responsabilidades entre React Query/Redux Toolkit/Redux Saga, os componentes visuais e a identidade do design system) partiram de mim e foram revisadas e ajustadas por mim ao longo de várias iterações — inclusive corrigindo o próprio Claude Code quando o resultado não estava alinhado ao que eu queria (idioma incorreto em código, componentes nativos do navegador em vez de customizados, cores fora do padrão, bugs de layout, etc.).
+- **O que a IA acelerou**: geração do boilerplate inicial dos módulos NestJS e das telas Next.js seguindo os padrões que eu defini, refatorações mecânicas, a formatação e redação deste README, e a configuração do Docker Compose (Dockerfiles multi-stage, variáveis de ambiente, healthchecks).
+- **Por que uso assim**: no dia a dia como desenvolvedor sênior, uso ferramentas de IA da mesma forma que uso um bom editor, um linter ou um copiloto de código — para ganhar velocidade na execução, não para terceirizar as decisões técnicas. Acho importante ser transparente sobre isso em um desafio técnico, já que faz parte do meu fluxo de trabalho real e é uma competência que considero relevante para a vaga.

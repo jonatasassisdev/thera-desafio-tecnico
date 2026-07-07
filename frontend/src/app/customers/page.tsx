@@ -184,58 +184,60 @@ export default function CustomersPage() {
         ) : filteredCustomers.length === 0 ? (
           <EmptyState title="Nenhum cliente encontrado" description="Tente ajustar os filtros." icon={Users} />
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-line text-xs uppercase tracking-wider text-text-muted">
-                <th className="px-5 py-3 font-medium">Nome</th>
-                <th className="px-5 py-3 font-medium">Documento</th>
-                <th className="px-5 py-3 font-medium">Transportes autorizados</th>
-                <th className="px-5 py-3 font-medium" />
-              </tr>
-            </thead>
-            <tbody>
-              {pagedCustomers.map((customer) => (
-                <tr key={customer.id} className="border-b border-line-soft last:border-0">
-                  <td className="px-5 py-3 text-text-primary">{customer.name}</td>
-                  <td className="px-5 py-3 text-text-secondary">{formatDocument(customer.document)}</td>
-                  <td className="px-5 py-3">
-                    <div className="flex flex-wrap gap-1.5">
-                      {customer.authorizedTransportTypes.length === 0 ? (
-                        <span className="text-xs text-text-muted">Nenhum</span>
-                      ) : (
-                        customer.authorizedTransportTypes.map((entry) => (
-                          <span
-                            key={entry.transportTypeId}
-                            className="rounded-sm border border-line px-2 py-0.5 text-[11px] text-text-secondary"
-                          >
-                            {entry.transportType.name}
-                          </span>
-                        ))
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-5 py-3">
-                    <div className="flex justify-end gap-3">
-                      <button
-                        onClick={() => openEditModal(customer)}
-                        className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
-                      >
-                        <Pencil size={13} strokeWidth={2} />
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => setDeleting(customer)}
-                        className="inline-flex items-center gap-1 text-xs font-medium text-danger hover:underline"
-                      >
-                        <Trash2 size={13} strokeWidth={2} />
-                        Excluir
-                      </button>
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-line text-xs uppercase tracking-wider text-text-muted">
+                  <th className="px-5 py-3 font-medium">Nome</th>
+                  <th className="px-5 py-3 font-medium">Documento</th>
+                  <th className="px-5 py-3 font-medium">Transportes autorizados</th>
+                  <th className="px-5 py-3 font-medium" />
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {pagedCustomers.map((customer) => (
+                  <tr key={customer.id} className="border-b border-line-soft last:border-0">
+                    <td className="px-5 py-3 text-text-primary">{customer.name}</td>
+                    <td className="whitespace-nowrap px-5 py-3 text-text-secondary">{formatDocument(customer.document)}</td>
+                    <td className="px-5 py-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        {customer.authorizedTransportTypes.length === 0 ? (
+                          <span className="text-xs text-text-muted">Nenhum</span>
+                        ) : (
+                          customer.authorizedTransportTypes.map((entry) => (
+                            <span
+                              key={entry.transportTypeId}
+                              className="whitespace-nowrap rounded-sm border border-line px-2 py-0.5 text-[11px] text-text-secondary"
+                            >
+                              {entry.transportType.name}
+                            </span>
+                          ))
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-5 py-3">
+                      <div className="flex justify-end gap-3">
+                        <button
+                          onClick={() => openEditModal(customer)}
+                          className="inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium text-accent hover:underline"
+                        >
+                          <Pencil size={13} strokeWidth={2} />
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => setDeleting(customer)}
+                          className="inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium text-danger hover:underline"
+                        >
+                          <Trash2 size={13} strokeWidth={2} />
+                          Excluir
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         {filteredCustomers.length > 0 && (
           <Pagination page={page} totalPages={totalPages} total={filteredCustomers.length} onPageChange={setPage} />

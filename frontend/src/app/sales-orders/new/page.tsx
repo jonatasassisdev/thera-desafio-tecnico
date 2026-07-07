@@ -151,7 +151,10 @@ export default function NewSalesOrderPage() {
 
           <div className="flex flex-col divide-y divide-line-soft">
             {fields.map((field, index) => (
-              <div key={field.id} className="grid grid-cols-[1fr_120px_auto] items-end gap-4 px-5 py-4">
+              <div
+                key={field.id}
+                className="grid grid-cols-1 items-end gap-4 px-5 py-4 sm:grid-cols-[1fr_120px_auto]"
+              >
                 <FieldWrapper label="Item" error={errors.items?.[index]?.itemId?.message}>
                   <Controller
                     control={control}

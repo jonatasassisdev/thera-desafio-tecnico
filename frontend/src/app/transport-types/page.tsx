@@ -162,54 +162,56 @@ export default function TransportTypesPage() {
         ) : filteredTransportTypes.length === 0 ? (
           <EmptyState title="Nenhum tipo de transporte encontrado" description="Tente ajustar os filtros." icon={Truck} />
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-line text-xs uppercase tracking-wider text-text-muted">
-                <th className="px-5 py-3 font-medium">Nome</th>
-                <th className="px-5 py-3 font-medium">Descrição</th>
-                <th className="px-5 py-3 font-medium">Ativo</th>
-                <th className="px-5 py-3 font-medium" />
-              </tr>
-            </thead>
-            <tbody>
-              {pagedTransportTypes.map((transportType) => (
-                <tr key={transportType.id} className="border-b border-line-soft last:border-0">
-                  <td className="px-5 py-3 text-text-primary">{transportType.name}</td>
-                  <td className="px-5 py-3 text-text-secondary">{transportType.description ?? "—"}</td>
-                  <td className="px-5 py-3">
-                    <button
-                      onClick={() =>
-                        updateTransportType.mutate({ id: transportType.id, input: { active: !transportType.active } })
-                      }
-                      className={`rounded-full border-2 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider transition-colors ${chipToneClassName(
-                        transportType.active ? "success" : "disabled",
-                      )}`}
-                    >
-                      {transportType.active ? "Ativo" : "Inativo"}
-                    </button>
-                  </td>
-                  <td className="px-5 py-3">
-                    <div className="flex justify-end gap-3">
-                      <button
-                        onClick={() => openEditModal(transportType)}
-                        className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
-                      >
-                        <Pencil size={13} strokeWidth={2} />
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => setDeleting(transportType)}
-                        className="inline-flex items-center gap-1 text-xs font-medium text-danger hover:underline"
-                      >
-                        <Trash2 size={13} strokeWidth={2} />
-                        Excluir
-                      </button>
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-line text-xs uppercase tracking-wider text-text-muted">
+                  <th className="px-5 py-3 font-medium">Nome</th>
+                  <th className="px-5 py-3 font-medium">Descrição</th>
+                  <th className="px-5 py-3 font-medium">Ativo</th>
+                  <th className="px-5 py-3 font-medium" />
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {pagedTransportTypes.map((transportType) => (
+                  <tr key={transportType.id} className="border-b border-line-soft last:border-0">
+                    <td className="px-5 py-3 text-text-primary">{transportType.name}</td>
+                    <td className="px-5 py-3 text-text-secondary">{transportType.description ?? "—"}</td>
+                    <td className="whitespace-nowrap px-5 py-3">
+                      <button
+                        onClick={() =>
+                          updateTransportType.mutate({ id: transportType.id, input: { active: !transportType.active } })
+                        }
+                        className={`rounded-full border-2 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider transition-colors ${chipToneClassName(
+                          transportType.active ? "success" : "disabled",
+                        )}`}
+                      >
+                        {transportType.active ? "Ativo" : "Inativo"}
+                      </button>
+                    </td>
+                    <td className="px-5 py-3">
+                      <div className="flex justify-end gap-3">
+                        <button
+                          onClick={() => openEditModal(transportType)}
+                          className="inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium text-accent hover:underline"
+                        >
+                          <Pencil size={13} strokeWidth={2} />
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => setDeleting(transportType)}
+                          className="inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium text-danger hover:underline"
+                        >
+                          <Trash2 size={13} strokeWidth={2} />
+                          Excluir
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         {filteredTransportTypes.length > 0 && (
           <Pagination page={page} totalPages={totalPages} total={filteredTransportTypes.length} onPageChange={setPage} />

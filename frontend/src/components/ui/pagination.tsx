@@ -12,7 +12,7 @@ export function Pagination({ page, totalPages, total, onPageChange }: Pagination
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-between border-t border-line px-5 py-3">
+    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-5 py-3">
       <span className="text-xs text-text-muted">
         Página {page} de {totalPages} · {total} {total === 1 ? "registro" : "registros"}
       </span>

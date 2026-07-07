@@ -79,7 +79,7 @@ export default function SalesOrderDetailPage() {
               Atual: <span className="text-accent">{order.transportType.name}</span>
             </p>
             {canChangeTransport ? (
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <AutocompleteInput
                   className="flex-1"
                   value={transportDraft}
@@ -109,24 +109,26 @@ export default function SalesOrderDetailPage() {
 
         <Card>
           <CardHeader title="Itens" />
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-line-soft text-xs uppercase tracking-wider text-text-muted">
-                <th className="px-5 py-2 font-medium">SKU</th>
-                <th className="px-5 py-2 font-medium">Nome</th>
-                <th className="px-5 py-2 font-medium">Qtd.</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map((entry) => (
-                <tr key={entry.id} className="border-b border-line-soft last:border-0">
-                  <td className="mono-tabular px-5 py-2 text-text-secondary">{entry.item.sku}</td>
-                  <td className="px-5 py-2 text-text-primary">{entry.item.name}</td>
-                  <td className="mono-tabular px-5 py-2 text-text-secondary">{entry.quantity}</td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-line-soft text-xs uppercase tracking-wider text-text-muted">
+                  <th className="px-5 py-2 font-medium">SKU</th>
+                  <th className="px-5 py-2 font-medium">Nome</th>
+                  <th className="px-5 py-2 font-medium">Qtd.</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {order.items.map((entry) => (
+                  <tr key={entry.id} className="border-b border-line-soft last:border-0">
+                    <td className="mono-tabular whitespace-nowrap px-5 py-2 text-text-secondary">{entry.item.sku}</td>
+                    <td className="px-5 py-2 text-text-primary">{entry.item.name}</td>
+                    <td className="mono-tabular whitespace-nowrap px-5 py-2 text-text-secondary">{entry.quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Card>
       </div>
 

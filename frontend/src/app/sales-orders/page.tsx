@@ -97,7 +97,7 @@ function SalesOrdersContent() {
       />
 
       <Card className="mb-6">
-        <div className="grid grid-cols-2 gap-4 p-5 md:grid-cols-5">
+        <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 md:grid-cols-5">
           <SelectInput
             value={filters.status}
             onChange={(value) => setFilter("status", value)}

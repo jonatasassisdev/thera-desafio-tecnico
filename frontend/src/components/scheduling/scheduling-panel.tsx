@@ -55,9 +55,9 @@ export function SchedulingPanel({ salesOrderId, scheduling }: { salesOrderId: st
   if (!editing && scheduling) {
     return (
       <div className="flex flex-col gap-4 p-5">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <SchedulingStatusBadge status={scheduling.status} />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {scheduling.status !== "CONFIRMED" && (
               <Button
                 variant="secondary"
@@ -73,7 +73,7 @@ export function SchedulingPanel({ salesOrderId, scheduling }: { salesOrderId: st
             </Button>
           </div>
         </div>
-        <dl className="grid grid-cols-3 gap-4 text-sm">
+        <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
           <div>
             <dt className="text-xs uppercase tracking-wider text-text-muted">Data de entrega</dt>
             <dd className="mono-tabular mt-1 text-text-primary">
@@ -95,7 +95,7 @@ export function SchedulingPanel({ salesOrderId, scheduling }: { salesOrderId: st
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4 p-5">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <FieldWrapper label="Data de entrega" error={errors.deliveryDate?.message}>
           <Controller
             control={control}

@@ -33,7 +33,7 @@ export function Modal({ open, onClose, title, description, children }: ModalProp
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-6 pt-24"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4 pt-10 sm:p-6 sm:pt-24"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}

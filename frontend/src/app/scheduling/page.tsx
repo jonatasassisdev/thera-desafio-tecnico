@@ -58,50 +58,52 @@ export default function SchedulingCenterPage() {
             description="As ordens aparecem aqui assim que saem do status CRIADA."
           />
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-line text-xs uppercase tracking-wider text-text-muted">
-                <th className="px-5 py-3 font-medium">#</th>
-                <th className="px-5 py-3 font-medium">Cliente</th>
-                <th className="px-5 py-3 font-medium">Status da ordem</th>
-                <th className="px-5 py-3 font-medium">Data de entrega</th>
-                <th className="px-5 py-3 font-medium">Agendamento</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <Fragment key={order.id}>
-                  <tr
-                    onClick={() => setExpandedId(expandedId === order.id ? null : order.id)}
-                    className="cursor-pointer border-b border-line-soft transition-colors hover:bg-raised"
-                  >
-                    <td className="mono-tabular px-5 py-3 text-text-secondary">#{order.number}</td>
-                    <td className="px-5 py-3 text-text-primary">{order.customer.name}</td>
-                    <td className="px-5 py-3">
-                      <OrderStatusBadge status={order.status} />
-                    </td>
-                    <td className="mono-tabular px-5 py-3 text-text-secondary">
-                      {order.scheduling ? new Date(order.scheduling.deliveryDate).toLocaleDateString("pt-BR") : "—"}
-                    </td>
-                    <td className="px-5 py-3">
-                      {order.scheduling ? (
-                        <SchedulingStatusBadge status={order.scheduling.status} />
-                      ) : (
-                        <span className="text-xs text-text-muted">Não definido</span>
-                      )}
-                    </td>
-                  </tr>
-                  {expandedId === order.id && (
-                    <tr className="border-b border-line-soft bg-inset">
-                      <td colSpan={5} className="p-0">
-                        <SchedulingPanel salesOrderId={order.id} scheduling={order.scheduling} />
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-line text-xs uppercase tracking-wider text-text-muted">
+                  <th className="px-5 py-3 font-medium">#</th>
+                  <th className="px-5 py-3 font-medium">Cliente</th>
+                  <th className="px-5 py-3 font-medium">Status da ordem</th>
+                  <th className="px-5 py-3 font-medium">Data de entrega</th>
+                  <th className="px-5 py-3 font-medium">Agendamento</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <Fragment key={order.id}>
+                    <tr
+                      onClick={() => setExpandedId(expandedId === order.id ? null : order.id)}
+                      className="cursor-pointer border-b border-line-soft transition-colors hover:bg-raised"
+                    >
+                      <td className="mono-tabular whitespace-nowrap px-5 py-3 text-text-secondary">#{order.number}</td>
+                      <td className="px-5 py-3 text-text-primary">{order.customer.name}</td>
+                      <td className="whitespace-nowrap px-5 py-3">
+                        <OrderStatusBadge status={order.status} />
+                      </td>
+                      <td className="mono-tabular whitespace-nowrap px-5 py-3 text-text-secondary">
+                        {order.scheduling ? new Date(order.scheduling.deliveryDate).toLocaleDateString("pt-BR") : "—"}
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3">
+                        {order.scheduling ? (
+                          <SchedulingStatusBadge status={order.scheduling.status} />
+                        ) : (
+                          <span className="text-xs text-text-muted">Não definido</span>
+                        )}
                       </td>
                     </tr>
-                  )}
-                </Fragment>
-              ))}
-            </tbody>
-          </table>
+                    {expandedId === order.id && (
+                      <tr className="border-b border-line-soft bg-inset">
+                        <td colSpan={5} className="p-0">
+                          <SchedulingPanel salesOrderId={order.id} scheduling={order.scheduling} />
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         {meta && <Pagination page={meta.page} totalPages={meta.totalPages} total={meta.total} onPageChange={setPage} />}
       </Card>

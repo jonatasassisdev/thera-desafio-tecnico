@@ -138,43 +138,45 @@ export default function ItemsPage() {
         ) : filteredItems.length === 0 ? (
           <EmptyState title="Nenhum item encontrado" description="Tente ajustar a busca." icon={Package} />
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-line text-xs uppercase tracking-wider text-text-muted">
-                <th className="px-5 py-3 font-medium">SKU</th>
-                <th className="px-5 py-3 font-medium">Nome</th>
-                <th className="px-5 py-3 font-medium">Descrição</th>
-                <th className="px-5 py-3 font-medium" />
-              </tr>
-            </thead>
-            <tbody>
-              {pagedItems.map((item) => (
-                <tr key={item.id} className="border-b border-line-soft last:border-0">
-                  <td className="mono-tabular px-5 py-3 text-text-secondary">{item.sku}</td>
-                  <td className="px-5 py-3 text-text-primary">{item.name}</td>
-                  <td className="px-5 py-3 text-text-secondary">{item.description ?? "—"}</td>
-                  <td className="px-5 py-3">
-                    <div className="flex justify-end gap-3">
-                      <button
-                        onClick={() => openEditModal(item)}
-                        className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
-                      >
-                        <Pencil size={13} strokeWidth={2} />
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => setDeleting(item)}
-                        className="inline-flex items-center gap-1 text-xs font-medium text-danger hover:underline"
-                      >
-                        <Trash2 size={13} strokeWidth={2} />
-                        Excluir
-                      </button>
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-line text-xs uppercase tracking-wider text-text-muted">
+                  <th className="px-5 py-3 font-medium">SKU</th>
+                  <th className="px-5 py-3 font-medium">Nome</th>
+                  <th className="px-5 py-3 font-medium">Descrição</th>
+                  <th className="px-5 py-3 font-medium" />
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {pagedItems.map((item) => (
+                  <tr key={item.id} className="border-b border-line-soft last:border-0">
+                    <td className="mono-tabular whitespace-nowrap px-5 py-3 text-text-secondary">{item.sku}</td>
+                    <td className="px-5 py-3 text-text-primary">{item.name}</td>
+                    <td className="px-5 py-3 text-text-secondary">{item.description ?? "—"}</td>
+                    <td className="px-5 py-3">
+                      <div className="flex justify-end gap-3">
+                        <button
+                          onClick={() => openEditModal(item)}
+                          className="inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium text-accent hover:underline"
+                        >
+                          <Pencil size={13} strokeWidth={2} />
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => setDeleting(item)}
+                          className="inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium text-danger hover:underline"
+                        >
+                          <Trash2 size={13} strokeWidth={2} />
+                          Excluir
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         {filteredItems.length > 0 && (
           <Pagination page={page} totalPages={totalPages} total={filteredItems.length} onPageChange={setPage} />
